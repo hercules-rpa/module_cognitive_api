@@ -17,6 +17,9 @@ def getBlueprint():
 
 class PDF2Table(Resource):
     def post(self):
+        """
+        Extrae tablas de imágenes o documentos PDF's  que te devuelve en un dataframe y adicionalmente, si se ha especificado, en un formato XLSX a través del correo electrónico.
+        """
         solicitud_pdf = request.get_json(force=True)
         try:
             pdf = ProcessExtractTable(solicitud_pdf)
@@ -30,6 +33,9 @@ class PDF2Table(Resource):
 
 class ExtractXMLExecute(Resource):
     def post(self):
+        """
+        Devuelve los nodos XML dado la URL y el fichero XML.
+        """
         solicitud_xml = request.get_json(force=True)
         try:
             result = []
@@ -42,8 +48,11 @@ class ExtractXMLExecute(Resource):
         except Exception as e:
             abort(400, description=str(e))
 
-class ExtractXMLTraerDocumento(Resource):
+class ExtractXMLGetDocument(Resource):
     def post(self):
+        """
+        Esta llamada consulta la url_origen dado y escribe el resultado, si existe, en el destino seleccionado. Devuelve el código de respuesta a la llamada con la url_origen.
+        """
         solicitud_xml = request.get_json(force=True)
         try:
             xml = ProcessExtractXml(solicitud_xml)
@@ -55,8 +64,11 @@ class ExtractXMLTraerDocumento(Resource):
         except Exception as e:
             abort(400, description=str(e))
 
-class ExtractXMLObtenerDiccionario(Resource):
+class ExtractXMLGetDictionary(Resource):
     def post(self):
+        """
+        Dado un fichero XML y los parámetros devuelve un diccionario con el resultado de ese fichero XML.
+        """
         solicitud_xml = request.get_json(force=True)
         try:
             result = {}
@@ -72,6 +84,9 @@ class ExtractXMLObtenerDiccionario(Resource):
 
 class WebScrappingBDNSSearch(Resource):
     def post(self):
+        """
+        Esta llamada consulta la página web de la Base de datos nacional de subvenciones y te devuelve el resultado en formato CSV de la consulta realizada con los parámetros dados.
+        """
         solicitud_bdns = request.get_json(force=True)
         try:
             bdns = WebScrapping()
@@ -87,6 +102,9 @@ class WebScrappingBDNSSearch(Resource):
 
 class WebScrappingBDNSData(Resource):
     def post(self):
+        """
+        Dado el número de la BDNS te devuelve la información ampliada en la página web sobre dicha convocatoria.
+        """
         solicitud_bdns = request.get_json(force=True)
         try:
             result = {}
@@ -101,6 +119,9 @@ class WebScrappingBDNSData(Resource):
 
 class DataMiningGetAllCluster(Resource):
     def get(self):
+        """
+        Devuelve todo el cluster de la llamada SPARQL que realiza al entorno EDMA con toda la información sobre investigadores.
+        """
         try:
             result = {}
             DataMining.load_model()
@@ -114,6 +135,9 @@ class DataMiningGetAllCluster(Resource):
 
 class DataMiningGetAllCategories(Resource):
     def get(self):
+        """
+        Devuelve una lista de las categories extraídas del dataframe de la consulta SPARQL que se realiza al entorno EDMA.
+        """
         try:
             result = {}
             DataMining.load_model()
@@ -127,6 +151,9 @@ class DataMiningGetAllCategories(Resource):
 
 class DataMiningGetAllTag(Resource):
     def get(self):
+        """
+        Devuelve una lista de tags extraídos del dataframe de la consulta SPARQL que se realiza al entorno EDMA.
+        """
         try:
             result = {}
             DataMining.load_model()
@@ -140,6 +167,9 @@ class DataMiningGetAllTag(Resource):
 
 class DataMiningGetCategoriesInterestResearch(Resource):
     def post(self):
+        """
+        Devuelve una lista de categorías en las que el investigador ha participado.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -154,6 +184,9 @@ class DataMiningGetCategoriesInterestResearch(Resource):
 
 class DataMiningGetTagsInterestResearch(Resource):
     def post(self):
+        """
+        Devuelve una lista de tags en las que el investigado ha participado.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -168,6 +201,9 @@ class DataMiningGetTagsInterestResearch(Resource):
 
 class DataMiningGetResearchClusters(Resource):
     def post(self):
+        """
+        Devuelve una lista de clusters en las que el investigador ha participado.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -182,6 +218,9 @@ class DataMiningGetResearchClusters(Resource):
 
 class DataMiningGetResearchRelation(Resource):
     def post(self):
+        """
+        Devuelve una lista de las relaciones que tiene el investigador.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -196,6 +235,9 @@ class DataMiningGetResearchRelation(Resource):
 
 class DataMiningGetResearchTag(Resource):
     def post(self):
+        """
+        Devuelve una lista de emails asociados a investigadores los cuales cumplen que tienen alguna relación con los tags dados como parámetros.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -210,6 +252,9 @@ class DataMiningGetResearchTag(Resource):
 
 class DataMiningGetResearchCategory(Resource):
     def post(self):
+        """
+        Devuelve una lista de emails asociados a los investigadores los cuales cumplen que tienen alguna relación con las categories dadas como parámetros.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -224,6 +269,9 @@ class DataMiningGetResearchCategory(Resource):
 
 class DataMiningGetResearchCategoryTag(Resource):
     def post(self):
+        """
+        Devuelve una lista de emails asociados a los investigadores lo cuales cumplen que tienen alguna relación con las categories y tags dados como parámetros.
+        """
         solicitud_datamining = request.get_json(force=True)
         try:
             result = {}
@@ -236,19 +284,19 @@ class DataMiningGetResearchCategoryTag(Resource):
         except Exception as e:
             abort(400, description=str(e))  
 
-api.add_resource(PDF2Table, '/api/modulo_cognitivo/pdf_to_table/', endpoint='pdf_to_table_execute_resource')
-api.add_resource(ExtractXMLExecute, '/api/modulo_cognitivo/xml/execute', endpoint='xml_execute_resource')
-api.add_resource(ExtractXMLTraerDocumento, '/api/modulo_cognitivo/xml/traer_documento', endpoint='xml_traer_documento_resource')
-api.add_resource(ExtractXMLObtenerDiccionario, '/api/modulo_cognitivo/xml/obtener_diccionario', endpoint='xml_obtener_diccionario_resource')
-api.add_resource(WebScrappingBDNSSearch, '/api/modulo_cognitivo/bdns/search', endpoint='bdns_search_date_resource')
-api.add_resource(WebScrappingBDNSData, '/api/modulo_cognitivo/bdns/data', endpoint='bdns_data_resource')
-api.add_resource(DataMiningGetAllCluster, '/api/modulo_cognitivo/datamining/all_cluster', endpoint='datamining_all_cluster_resource')
-api.add_resource(DataMiningGetAllCategories, '/api/modulo_cognitivo/datamining/all_categories', endpoint='datamining_all_categories_resource')
-api.add_resource(DataMiningGetAllTag, '/api/modulo_cognitivo/datamining/all_tag', endpoint='datamining_all_tag_resource')
-api.add_resource(DataMiningGetCategoriesInterestResearch, '/api/modulo_cognitivo/datamining/categories_interest_research', endpoint='datamining_categories_interest_research_resource')
-api.add_resource(DataMiningGetTagsInterestResearch, '/api/modulo_cognitivo/datamining/tags_interest_research', endpoint='datamining_tags_interest_research_resource')
-api.add_resource(DataMiningGetResearchClusters, '/api/modulo_cognitivo/datamining/research_clusters', endpoint='datamining_research_clusters_resource')
-api.add_resource(DataMiningGetResearchRelation, '/api/modulo_cognitivo/datamining/research_relation', endpoint='datamining_research_relation_resource')
-api.add_resource(DataMiningGetResearchTag, '/api/modulo_cognitivo/datamining/research_tag', endpoint='datamining_research_tag_resource')
-api.add_resource(DataMiningGetResearchCategory, '/api/modulo_cognitivo/datamining/research_category', endpoint='datamining_research_category_resource')
-api.add_resource(DataMiningGetResearchCategoryTag, '/api/modulo_cognitivo/datamining/research_category_tag', endpoint='datamining_research_category_tag_resource')
+api.add_resource(PDF2Table, '/api/module_cognitive/pdf_to_table/', endpoint='pdf_to_table_execute_resource')
+api.add_resource(ExtractXMLExecute, '/api/module_cognitive/xml/execute', endpoint='xml_execute_resource')
+api.add_resource(ExtractXMLGetDocument, '/api/module_cognitive/xml/get_document', endpoint='xml_get_document_resource')
+api.add_resource(ExtractXMLGetDictionary, '/api/module_cognitive/xml/get_dictionary', endpoint='xml_get_dictionary_resource')
+api.add_resource(WebScrappingBDNSSearch, '/api/module_cognitive/bdns/search', endpoint='bdns_search_date_resource')
+api.add_resource(WebScrappingBDNSData, '/api/module_cognitive/bdns/data', endpoint='bdns_data_resource')
+api.add_resource(DataMiningGetAllCluster, '/api/module_cognitive/datamining/all_cluster', endpoint='datamining_all_cluster_resource')
+api.add_resource(DataMiningGetAllCategories, '/api/module_cognitive/datamining/all_categories', endpoint='datamining_all_categories_resource')
+api.add_resource(DataMiningGetAllTag, '/api/module_cognitive/datamining/all_tag', endpoint='datamining_all_tag_resource')
+api.add_resource(DataMiningGetCategoriesInterestResearch, '/api/module_cognitive/datamining/categories_interest_research', endpoint='datamining_categories_interest_research_resource')
+api.add_resource(DataMiningGetTagsInterestResearch, '/api/module_cognitive/datamining/tags_interest_research', endpoint='datamining_tags_interest_research_resource')
+api.add_resource(DataMiningGetResearchClusters, '/api/module_cognitive/datamining/research_clusters', endpoint='datamining_research_clusters_resource')
+api.add_resource(DataMiningGetResearchRelation, '/api/module_cognitive/datamining/research_relation', endpoint='datamining_research_relation_resource')
+api.add_resource(DataMiningGetResearchTag, '/api/module_cognitive/datamining/research_tag', endpoint='datamining_research_tag_resource')
+api.add_resource(DataMiningGetResearchCategory, '/api/module_cognitive/datamining/research_category', endpoint='datamining_research_category_resource')
+api.add_resource(DataMiningGetResearchCategoryTag, '/api/module_cognitive/datamining/research_category_tag', endpoint='datamining_research_category_tag_resource')
